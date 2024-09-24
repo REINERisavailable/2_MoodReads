@@ -1,23 +1,27 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 from mood_recommender import mood_recommender
+from dashboard_page import dashboard_page  # Import the dashboard_page function
+from algorithms_page import Algorithms_page  # Import the Algorithms_page function
+import pandas as pd
+
+# Load the dataset
+books_df = pd.read_csv('books.csv')
 
 # ... existing code ...
 
 def main_page():
     mood_recommender()
 
-def dashboard_page():
-    st.title("Dashboard")
-    st.write("This is the dashboard page.")
-
-def Algorithms_page():
-    st.title("Mood-based Book Recommendations")
-    
-
 def feedback_page():
-    st.title("Feedback")
-    st.write("Please provide your feedback here.")
+    st.title("Feedback and Quotes")
+    
+    user_quote = st.text_area("Enter your quote here")
+    if st.button("Submit"):
+        st.write("Thank you for your submission!")
+    
+    st.write("### Recently Submitted Quotes")
+    st.write("No quotes submitted yet.")
 
 # Navigation menu
 selected = option_menu(
@@ -34,8 +38,8 @@ if selected == "Main Page":
     main_page()
 elif selected == "Dashboard":
     dashboard_page()
-elif selected == "Recommendations":
-    recommendations_page()
+elif selected == "Algorithms":
+    Algorithms_page()
 elif selected == "Feedback":
     feedback_page()
 
