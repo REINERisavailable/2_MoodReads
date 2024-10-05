@@ -4,10 +4,8 @@ from PIL import Image
 from io import BytesIO
 from groq import Groq
 
-# Initialize Groq client
-client = Groq(api_key="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")
+client = Groq(api_key="")
 
-# Function to get book recommendations based on mood
 def get_book_recommendations(mood):
     prompt = f"""Recommend three books for someone feeling {mood}. For each book, provide the following information in a Python dictionary format:
     - title: The book's title
@@ -15,7 +13,7 @@ def get_book_recommendations(mood):
     - rating: A float between 1 and 5
     - genres: A list of 2-3 genres
     - description: A brief description (20-30 words)
-    - image_url: A valid URL for the book's cover image (use real book cover URLs if possible)
+    - image_url: A valid URL for the book's cover image (use real book cover URL)
 
     Return the result as a Python list containing three dictionaries, one for each book recommendation."""
     
@@ -31,12 +29,11 @@ def get_book_recommendations(mood):
             max_tokens=800,
         )
         
-        # Parse the response and convert it to a list of dictionaries
+        
         books = eval(chat_completion.choices[0].message.content.strip())
         return books
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
-        # If parsing fails, return dummy data
         return [
             {
                 "title": "The Happiness Project",
@@ -44,7 +41,7 @@ def get_book_recommendations(mood):
                 "rating": 4.5,
                 "genres": ["Self-help", "Personal Development"],
                 "description": "Gretchen Rubin's year-long experiment to discover how to create true happiness.",
-                "image_url": "https://images-na.ssl-images-amazon.com/images/I/51vJKtZKfmL._SX329_BO1,204,203,200_.jpg"
+                "image_url": "https://www.libertybooks.com/image/cache/catalog/87419-313x487.jpg?q6"
             },
             {
                 "title": "The Alchemist",
@@ -112,7 +109,6 @@ def mood_recommender():
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<button class="big-button">📚 MoodReads</button>', unsafe_allow_html=True)
 
     cont1 = st.container()
     cont2 = st.container()
@@ -140,7 +136,6 @@ def mood_recommender():
                 books = get_book_recommendations(selected_mood)
             for book in books:
                 display_book(book)
-                st.markdown("---")  # Add a separator between books
-
+                st.markdown("---")
 if __name__ == "__main__":
     mood_recommender()
